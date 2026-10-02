@@ -1,50 +1,65 @@
-🤖 Autonomous Mobile Robot (AMR) Navigation SystemAn edge-compatible Spatial Intelligence & Autonomous Navigation Platform built for real-time mobile robot mapping, optimal path planning, and dynamic obstacle avoidance in ROS2. The system seamlessly connects sensor data to robot movement using Extended Kalman Filtering (EKF), 2D LiDAR SLAM, occupancy grid pathfinding, and smooth velocity-scaling feedback loops.🏷️ System ClassificationROS2 Spatial Intelligence & Dynamic Navigation Control Pipeline📝 Overview & Core FunctionalityThe Autonomous Mobile Robot (AMR) Navigation System is a low-latency spatial intelligence system designed for smooth, reliable, and fully autonomous movement through unknown or changing environments.Using a continuous state-estimation pipeline, the system reads raw wheel odometry, IMU data, and 2D LiDAR scans to construct a live Occupancy Grid map on the fly. It plans collision-free paths using modified graph search and dynamically scales motor speed (cmd_vel) to dodge unexpected obstacles smoothly without any manual control.🛠️ Architecture & System Workflow┌─────────────────────────────────────────────────────────┐
-│         📡 Sensor Inputs (LiDAR + Odometry + IMU)       │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│           🔍 Phase 1: Environment & State               │
-├─────────────────────────────────────────────────────────┤
-│  ├─ Extended Kalman Filter (EKF Drift Correction)       │
-│  └─ 2D Occupancy Grid Mapping                           │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│             📐 Phase 2: Path Generation                 │
-├─────────────────────────────────────────────────────────┤
-│  ├─ A* Search Algorithm (Manhattan Distance)            │
-│  └─ Costmap Inflation & Trajectory Generation           │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│           🤖 Phase 3: Dynamic Motion Control            │
-├─────────────────────────────────────────────────────────┤
-│  ├─ Rolling Local Costmap Window                        │
-│  └─ Velocity Scaling (tanh Smooth Deceleration)         │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│            ⚙️ Motor Command Output: cmd_vel             │
-└─────────────────────────────────────────────────────────┘
-📡 Phase 1 — Environment Sensing & State Tracking🎥 Multi-Sensor Fusion: Seamlessly synchronizes raw wheel encoders, 9-DOF IMU telemetry, and 2D LiDAR point clouds at high loop rates.🎯 EKF State Estimation: Runs an Extended Kalman Filter (EKF) to blend odometry and inertial data, eliminating cumulative drift caused by wheel slips.📦 2D Occupancy Grid Mapping: Converts raw laser scan returns into clear 2D probability grid maps showing open space, obstacles, and unexplored areas.📐 Phase 2 — Path Calculation & Route Planning🔍 A Trajectory Planning:* Evaluates the occupancy grid using an A Search Algorithm* tuned with a Manhattan distance heuristic for optimal routing.🛡️ Safety Inflation Margins: Adds intelligent buffer zones around obstacle borders to match the robot’s physical footprint and prevent close calls.🔄 Coordinate Translation: Swiftly converts real-world spatial coordinates into grid matrix values for fast path calculations.⚙️ Waypoint Sequence Generation: Creates a structured list of spatial waypoints ($W_1 \dots W_n$) that guide the robot smoothly from start to goal.🤖 Phase 3 — Real-Time Obstacle Avoidance & Drive Control📈 Local Area Monitoring: Continuously checks a moving local sub-grid right around the robot to detect sudden, unmapped obstacles.📊 Speed & Direction Control: Calculates real-time linear ($v_x$) and angular ($\omega_z$) motor speed commands published directly to the cmd_vel ROS2 topic.⚠️ Smooth Deceleration: Uses a hyperbolic tangent ($\tanh$) mathematical curve for buttery-smooth slowing down or re-routing when obstacles pop up.🖥️ Live Telemetry Visualization: Streams real-time TF transform trees, costmap overlays, and path vectors directly to RViz2 for quick debugging and monitoring.💻 Tech Stack & Tools🤖 ROS2 (Robot Operating System 2): Core modular framework using nodes, topics, services, and actions for asynchronous communication.🐍 Python 3.10+ / C++17: Runtimes powering mathematical navigation nodes and high-frequency sensor processing.🔢 NumPy & Eigen: Handles fast matrix calculations, spatial coordinate transformations, and vector math.🗺️ Nav2 & SLAM Toolbox: Powers occupancy grid mapping, costmap lifecycle management, and spatial transform broadcasting (tf2).🖥️ Gazebo & RViz2: High-fidelity 3D physics simulator paired with real-time visualization viewports.🏭 Design Purpose & Practical Applications⚡ Predictable & Safe Motion: Pairs global route planning with local velocity damping ($\tanh$) to ensure controlled, natural movement without sudden jerks.📏 Accurate Spatial Mapping: Converts raw laser ranges into distinct occupancy values across active local and global costmap grids.🌐 Flexible Hardware Integration: Built to run seamlessly inside Gazebo simulation environments or deploy directly onto physical ROS2 differential-drive robots and industrial AGVs.🚀 Setup & Execution GuideFollow these steps to set up your ROS2 workspace and run the navigation pipeline:1. Workspace Configuration# Source base ROS2 distribution
+# 🤖 Autonomous Mobile Robot (AMR) Navigation System
+
+An intelligent, ROS2-powered spatial navigation platform designed to give mobile robots true autonomy in unpredictable environments[cite: 60, 62]. Instead of following hardcoded paths, this system enables a robot to map its surrounding world using LiDAR scans[cite: 60, 61], estimate its location accurately[cite: 64, 65], calculate optimal routes using $A^*$ search logic[cite: 61, 73], and dodge unexpected obstacles in real time[cite: 60, 61].
+
+---
+
+## 🏷️ Project Details
+* **Project Name:** Project 3 - Autonomous Mobile Robot (AMR) Navigation[cite: 59, 61]
+* **Program:** Industrial Training Kit (Batch 2026)[cite: 59]
+* **Platform:** Powered by DecodeLabs[cite: 59]
+
+---
+
+## 📝 What Does It Do?
+
+Rather than relying on fixed or repetitive movements[cite: 63], this system gives a wheeled robot complete spatial awareness to navigate through dynamic spaces[cite: 60, 61]. It solves three core problems in autonomous robotics[cite: 64]:
+
+1. **Self-Location Tracking ("Where am I?"):** Fuses data from wheel encoders, IMU sensors, and 2D LiDAR to build a live map and know the robot's exact position without getting lost[cite: 64, 66, 68].
+2. **Smart Route Calculation ("Where am I going?"):** Translates physical space into a grid matrix and calculates the safest, shortest path to a destination using mathematical pathfinding[cite: 69, 71, 74].
+3. **Real-Time Obstacle Avoidance ("How do I avoid hitting walls?"):** Constantly checks a small moving window around the robot to detect new barriers and smoothly slows down or reroutes automatically[cite: 64, 78, 79].
+
+---
+
+## 🛠️ Key Technical Requirements & Features
+
+* 🗺️ **LiDAR Occupancy Grid Mapping:** Converts raw laser scan ranges into a discrete 2D grid matrix ($0 = \text{Free Space}$, $100 = \text{Obstacle}$, $-1 = \text{Unexplored}$)[cite: 61, 69].
+* 🎯 **Extended Kalman Filter (EKF) Sensor Fusion:** Merges noisy IMU readings and wheel odometry to eliminate wheel slip errors and positional drift[cite: 67, 68].
+* 📐 **$A^*$ Pathfinding with Manhattan Heuristic:** Implements a priority-queue search algorithm using Manhattan distance to plan optimal 4-way grid routes[cite: 61, 74, 75].
+* 🛡️ **Costmap Inflation Buffer:** Artificially expands wall boundaries in the digital map so the robot chassis never scrapes against real-world obstacles[cite: 76].
+* ⚠️ **Smooth Hyperbolic Tangent ($\tanh$) Deceleration:** Dynamically scales motor speed based on obstacle proximity to ensure buttery-smooth braking instead of sudden jerks[cite: 79].
+
+---
+
+## 💻 Tech Stack & Frameworks
+
+* 🤖 **Core Framework:** ROS2 (Robot Operating System 2)[cite: 62]
+* 🗺️️ **Navigation & Mapping:** Nav2, SLAM / Gmapping Toolbox, `robot_localization`[cite: 62, 68, 70]
+* 🎛️ **State Estimation:** Extended Kalman Filter (`ekf_localization_node`)[cite: 68, 70]
+* 🖥️ **Simulation & Visualization:** Gazebo Simulator & RViz2[cite: 66, 80, 83]
+* 🔢 **Coordinate Transformation:** TF2 Transform Trees (`map` $\rightarrow$ `odom` $\rightarrow$ `base_link`)[cite: 70, 82]
+
+---
+
+## ⚙️ How to Run (Commands to Start the Project)
+
+Follow these terminal steps to configure your ROS2 workspace, build the project packages, and launch the navigation loop[cite: 81]:
+
+### 1. Workspace Configuration & Setup
+Open your terminal and source your base ROS2 installation, then clone and build the project repository:
+
+```bash
+# Source ROS2 Humble environment
 source /opt/ros/humble/setup.bash
 
 # Create workspace directory structure
 mkdir -p ~/amr_ws/src
 cd ~/amr_ws/src
 
-# Clone the project repository
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git amr_navigation
+# Clone the project source code
+git clone [https://github.com/YOUR-USERNAME/amr_navigation.git](https://github.com/YOUR-USERNAME/amr_navigation.git)
 
-# Build workspace and source overlay
+# Build the workspace and source the overlay
 cd ~/amr_ws
 colcon build --symlink-install
 source install/setup.bash
-2. Launch SequenceOpen a new sourced terminal tab for each step:Step 1: Start Gazebo Simulation & EKF Noderos2 launch amr_navigation simulation_ekf.launch.py
-Step 2: Start SLAM Mapping Noderos2 launch amr_navigation slam_mapping.launch.py
-Step 3: Run A Path Planner Node*ros2 run amr_navigation a_star_planner
-Step 4: Start Obstacle Avoidance Controllerros2 run amr_navigation dynamic_avoidance_node
