@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="maze_world">
+    <!-- Ground Plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Sun Light Source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Outer Wall 1 -->
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 5 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer Wall 2 -->
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -5 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer Wall 3 -->
+    <model name="wall_east">
+      <static>true</static>
+      <pose>5 0 1 0 0 1.5708</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer Wall 4 -->
+    <model name="wall_west">
+      <static>true</static>
+      <pose>-5 0 1 0 0 1.5708</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 0.2 2</size></box></geometry>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Center Obstacle Box -->
+    <model name="obstacle_center">
+      <static>true</static>
+      <pose>0 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>1.5 1.5 1</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>1.5 1.5 1</size></box></geometry>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
