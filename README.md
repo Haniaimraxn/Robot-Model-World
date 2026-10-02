@@ -57,7 +57,7 @@ mkdir -p ~/amr_ws/src
 cd ~/amr_ws/src
 
 # Clone the project source code
-git clone [https://github.com/Haniaimraxn/Robot-Model-World.git](https://github.com/Haniaimraxn/Robot-Model-World.git)
+git clone https://github.com/Haniaimraxn/Robot-Model-World.git
 
 # Build the workspace and source the overlay
 cd ~/amr_ws
