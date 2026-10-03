@@ -22,7 +22,6 @@ setup(
     maintainer_email='user@example.com',
     description='AMR Navigation Package',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'a_star_planner = amr_navigation.a_star_planner:main',

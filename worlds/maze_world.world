@@ -1,17 +1,31 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="maze_world">
+    <!-- Physics Configuration -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- Scene Lighting & Background Settings -->
+    <scene>
+      <ambient>0.25 0.15 0.3 1.0</ambient>
+      <background>0.08 0.05 0.12 1.0</background>
+      <shadows>true</shadows>
+    </scene>
+
     <!-- Ground Plane -->
     <include>
-      <uri>model://ground_plane</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground Plane</uri>
     </include>
 
     <!-- Sun Light Source -->
     <include>
-      <uri>model://sun</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
     </include>
 
-    <!-- Outer Wall 1 -->
+    <!-- Outer Wall 1 (North) - Matte Dark Black -->
     <model name="wall_north">
       <static>true</static>
       <pose>0 5 1 0 0 0</pose>
@@ -21,11 +35,16 @@
         </collision>
         <visual name="visual">
           <geometry><box><size>10 0.2 2</size></box></geometry>
+          <material>
+            <ambient>0.05 0.05 0.07 1</ambient>
+            <diffuse>0.1 0.1 0.12 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
         </visual>
       </link>
     </model>
 
-    <!-- Outer Wall 2 -->
+    <!-- Outer Wall 2 (South) - Matte Dark Black -->
     <model name="wall_south">
       <static>true</static>
       <pose>0 -5 1 0 0 0</pose>
@@ -35,11 +54,16 @@
         </collision>
         <visual name="visual">
           <geometry><box><size>10 0.2 2</size></box></geometry>
+          <material>
+            <ambient>0.05 0.05 0.07 1</ambient>
+            <diffuse>0.1 0.1 0.12 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
         </visual>
       </link>
     </model>
 
-    <!-- Outer Wall 3 -->
+    <!-- Outer Wall 3 (East) - Matte Dark Black -->
     <model name="wall_east">
       <static>true</static>
       <pose>5 0 1 0 0 1.5708</pose>
@@ -49,11 +73,16 @@
         </collision>
         <visual name="visual">
           <geometry><box><size>10 0.2 2</size></box></geometry>
+          <material>
+            <ambient>0.05 0.05 0.07 1</ambient>
+            <diffuse>0.1 0.1 0.12 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
         </visual>
       </link>
     </model>
 
-    <!-- Outer Wall 4 -->
+    <!-- Outer Wall 4 (West) - Matte Dark Black -->
     <model name="wall_west">
       <static>true</static>
       <pose>-5 0 1 0 0 1.5708</pose>
@@ -63,11 +92,16 @@
         </collision>
         <visual name="visual">
           <geometry><box><size>10 0.2 2</size></box></geometry>
+          <material>
+            <ambient>0.05 0.05 0.07 1</ambient>
+            <diffuse>0.1 0.1 0.12 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
         </visual>
       </link>
     </model>
 
-    <!-- Center Obstacle Box -->
+    <!-- Center Obstacle Box - Royal Purple Accent -->
     <model name="obstacle_center">
       <static>true</static>
       <pose>0 0 0.5 0 0 0</pose>
@@ -77,6 +111,11 @@
         </collision>
         <visual name="visual">
           <geometry><box><size>1.5 1.5 1</size></box></geometry>
+          <material>
+            <ambient>0.3 0.05 0.45 1</ambient>
+            <diffuse>0.5 0.1 0.7 1</diffuse>
+            <specular>0.3 0.2 0.4 1</specular>
+          </material>
         </visual>
       </link>
     </model>
